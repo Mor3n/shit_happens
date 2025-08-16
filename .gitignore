@@ -5,3 +5,33 @@ __pycache__/
 .idea/
 .vscode/
 .DS_Store
+# Логи и дампы
+*.log
+*.bak
+*.tmp
+*.txt
+*.db
+*.sqlite3
+
+# Python cache
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# IDE
+.vscode/
+.idea/
+
+# Среда
+.env
+.env.*
+
+# Docker артефакты
+*.pid
+docker-compose.override.yml
+
+# Alembic автогенерация (если не требуется в репо)
+versions/*.pyc
