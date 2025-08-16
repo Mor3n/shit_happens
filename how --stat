@@ -1,0 +1,288 @@
+[33mcommit b785e2271116ec4e6b6b8279fd3e3cbd63546635[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Mor3n <paracetamolov.a@gmail.com>
+Date:   Sat Aug 16 14:11:41 2025 +0300
+
+    Initial commit: clean project rewrite
+
+ .dockerignore                                      |      4 [32m+[m
+ .env.example                                       |      2 [32m+[m
+ .gitignore                                         |      7 [32m+[m
+ .python-version                                    |      1 [32m+[m
+ .schema                                            |      0
+ Makefile                                           |     27 [32m+[m
+ README.md                                          |     15 [32m+[m
+ alembic.ini                                        |    147 [32m+[m
+ alembic/env.py                                     |      0
+ alembic_env/README                                 |      1 [32m+[m
+ alembic_env/__init__.py                            |      2 [32m+[m
+ alembic_env/__init__.py.bak                        |      0
+ alembic_env/__init__.py.bak2                       |      5 [32m+[m
+ alembic_env/config.py                              |      7 [32m+[m
+ alembic_env/config.py.bak                          |      4 [32m+[m
+ alembic_env/env.py                                 |     78 [32m+[m
+ alembic_env/script.py.mako                         |     28 [32m+[m
+ .../7a8844aab827_add_user_settings_fields.py       |     34 [32m+[m
+ alembic_env/versions/__init__.py                   |      0
+ app/__init__.py                                    |     16 [32m+[m
+ app/__init__.py.bak                                |      9 [32m+[m
+ app/ai/__init__.py                                 |      0
+ app/ai/client.py                                   |    144 [32m+[m
+ app/ai/prompts.py                                  |     11 [32m+[m
+ app/ai_adapter.py                                  |      4 [32m+[m
+ app/config.py                                      |      7 [32m+[m
+ app/config.py.bak                                  |      5 [32m+[m
+ app/config/__init__.py                             |      4 [32m+[m
+ app/config/__init__.py.bak                         |      0
+ app/config_compat.py                               |      6 [32m+[m
+ app/core/__init__.py                               |      0
+ app/db.py                                          |     14 [32m+[m
+ app/db.py.bak                                      |      6 [32m+[m
+ app/models/__init__.py                             |      4 [32m+[m
+ app/models/__init__.py.bak                         |      1 [32m+[m
+ app/models/base.py                                 |      6 [32m+[m
+ app/models/blocked.py                              |      7 [32m+[m
+ app/models/confession.py                           |     25 [32m+[m
+ app/models/example.py                              |      7 [32m+[m
+ app/models/preferences.py                          |     10 [32m+[m
+ app/models/reaction_log.py                         |     10 [32m+[m
+ app/routes.py                                      |      3 [32m+[m
+ app/routes/__init__.py                             |     11 [32m+[m
+ app/routes/confess.py                              |     20 [32m+[m
+ app/routes/digest.py                               |     14 [32m+[m
+ app/routes/digest_handler.py                       |      7 [32m+[m
+ app/routes/feed.py                                 |     22 [32m+[m
+ app/routes/health.py                               |      8 [32m+[m
+ app/routes/reaction.py                             |     13 [32m+[m
+ app/routes/settings.py                             |     23 [32m+[m
+ app/routes/stats.py                                |     19 [32m+[m
+ app/routes/webhook.py                              |    163 [32m+[m
+ app/services/__init__.py                           |      1 [32m+[m
+ app/services/ai_context.py                         |    129 [32m+[m
+ app/services/ai_engine.py                          |      9 [32m+[m
+ app/services/ai_engine.py.bak                      |     36 [32m+[m
+ app/services/ai_engine.py.bak_syntax               |     39 [32m+[m
+ app/services/ai_engine.py.bak_syntaxfix            |     39 [32m+[m
+ app/services/ai_generate.py                        |     38 [32m+[m
+ app/services/analytics_service.py                  |      5 [32m+[m
+ app/services/backup_service.py                     |      5 [32m+[m
+ app/services/confess_service.py                    |     74 [32m+[m
+ app/services/copilot_emulator.py                   |     14 [32m+[m
+ app/services/digest_service.py                     |      5 [32m+[m
+ app/services/digest_service.py.bak                 |      5 [32m+[m
+ app/services/feed_service.py                       |     17 [32m+[m
+ app/services/nlp_service.py                        |     25 [32m+[m
+ app/services/notification_service.py               |      5 [32m+[m
+ app/services/reaction_service.py                   |     83 [32m+[m
+ app/services/search_service.py                     |     37 [32m+[m
+ app/services/settings_service.py                   |     53 [32m+[m
+ app/services/stats_service.py                      |     53 [32m+[m
+ app/services/user_service.py                       |      5 [32m+[m
+ app/telegram/__init__.py                           |      0
+ app/telegram/dispatcher.py                         |     39 [32m+[m
+ app/telegram/error_handler.py                      |     10 [32m+[m
+ app/telegram/handlers/__init__.py                  |      0
+ app/telegram/handlers/button_handler.py            |     75 [32m+[m
+ app/telegram/handlers/confess_handler.py           |     63 [32m+[m
+ app/telegram/handlers/confess_handler.py.bak       |     84 [32m+[m
+ app/telegram/handlers/digest_handler.py            |     66 [32m+[m
+ app/telegram/handlers/feed_handler.py              |     22 [32m+[m
+ app/telegram/handlers/settings_handler.py          |     19 [32m+[m
+ app/telegram/handlers/start_handler.py             |     27 [32m+[m
+ app/telegram/handlers/stats_handler.py             |     28 [32m+[m
+ app/telegram/helpers.py                            |     47 [32m+[m
+ app/telegram/utils.py                              |     41 [32m+[m
+ app/utils/__init__.py                              |      1 [32m+[m
+ app/utils/env_loader.py                            |     13 [32m+[m
+ app/utils/formatters.py                            |      7 [32m+[m
+ app/utils/helpers.py                               |     23 [32m+[m
+ app/utils/logger.py                                |     10 [32m+[m
+ app/utils/text.py                                  |     16 [32m+[m
+ app/utils/validators.py                            |      8 [32m+[m
+ config/__init__.py                                 |     21 [32m+[m
+ config/config.py                                   |     22 [32m+[m
+ config/db.py                                       |    175 [32m+[m
+ config/db_manager.py                               |    368 [32m+[m
+ copilot_dump/__init__.py                           |      0
+ copilot_dump/tree.txt                              |      0
+ data/__init__.py                                   |      0
+ data/backups/__init__.py                           |      0
+ data/backups/backup_20250813_033129.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250813_033131.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250813_065112.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_065113.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_070147.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_070549.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_070551.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_071226.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_071228.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_080737.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250813_080738.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_054116.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_054121.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_060827.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_060832.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_061029.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_061033.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_061920.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_061923.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_062349.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_062353.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_062607.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_062610.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_062801.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_062805.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063003.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063010.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063112.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063117.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063258.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063302.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063404.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063409.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063423.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063428.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063644.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063648.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063729.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063734.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063828.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_063832.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_064022.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_064028.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_064417.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_064421.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_065839.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_065844.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_065917.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_065922.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_065958.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_070002.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_070800.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250815_070805.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250815_071102.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250815_071109.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250815_071215.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250815_071219.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250815_163334.db             |    Bin [31m0[m -> [32m4096[m bytes
+ data/backups/backup_20250815_163629.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250815_163631.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_103652.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_103654.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_111904.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_111905.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_111942.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_111943.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_112505.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_112506.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_113849.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_113850.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115313.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115314.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115521.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115522.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115608.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115609.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_115729.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_122357.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_124226.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_124437.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_124820.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_124821.db             |    Bin [31m0[m -> [32m32768[m bytes
+ data/backups/backup_20250816_130407.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_130408.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_131221.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_131832.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_131833.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_132816.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_134106.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_134107.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_134726.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_134917.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135041.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135049.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135146.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135147.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135158.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135340.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135341.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135345.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135348.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135349.db             |    Bin [31m0[m -> [32m40960[m bytes
+ data/backups/backup_20250816_135357.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_135918.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_135936.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140022.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140200.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140207.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140438.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140439.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/backups/backup_20250816_140449.db             |    Bin [31m0[m -> [32m45056[m bytes
+ data/confessions.db                                |    Bin [31m0[m -> [32m45056[m bytes
+ data/confessions.db.bak                            |    Bin [31m0[m -> [32m45056[m bytes
+ data/db_meta.json                                  |      1 [32m+[m
+ data/keyword_profiles.json                         |     31 [32m+[m
+ data/phrase_templates.json                         |      3 [32m+[m
+ data/user_profiles.json                            |      1 [32m+[m
+ digest_cache/__init__.py                           |      0
+ digest_cache/cache.py                              |     21 [32m+[m
+ digest_cache/digests/__init__.py                   |      0
+ .../digests/db93d63ada9d9bc4f5394c1ad6d9fec0.txt   |      3 [32m+[m
+ digest_cache/utils.py                              |      1 [32m+[m
+ dump/__init__.py                                   |      0
+ dump/content.txt                                   | 249232 [32m++++++++++++++++++[m
+ dump/tree.txt                                      |   4575 [32m+[m
+ gunicorn.conf.py                                   |     16 [32m+[m
+ instance/app.db                                    |      0
+ logs/__init__.py                                   |      0
+ manifest.json                                      |     26 [32m+[m
+ migrations/__init__.py                             |      0
+ migrations/env.py                                  |      0
+ migrations/init.sql                                |     20 [32m+[m
+ pytest.ini                                         |      5 [32m+[m
+ pytestdebug.txt                                    |   4064 [32m+[m
+ ref.py                                             |     21 [32m+[m
+ render.yaml                                        |     35 [32m+[m
+ requirements.txt                                   |     14 [32m+[m
+ run.py                                             |      4 [32m+[m
+ runtime.txt                                        |      1 [32m+[m
+ scheduler.py                                       |     21 [32m+[m
+ start.sh                                           |    135 [32m+[m
+ ...60\320\277\320\270\321\201\321\214\357\200\242" |     25 [32m+[m
+ tests/__init__.py                                  |      1 [32m+[m
+ tests/conftest.py                                  |     20 [32m+[m
+ tests/digest_cache/__init__.py                     |      0
+ tests/digest_cache/digests/__init__.py             |      0
+ tests/telegram/__init__.py                         |      0
+ tests/telegram/test_start_handler.py               |      2 [32m+[m
+ tests/test_ai_client.py                            |     47 [32m+[m
+ tests/test_backup.py                               |      7 [32m+[m
+ tests/test_confess.py                              |      9 [32m+[m
+ tests/test_confess_handler.py                      |     58 [32m+[m
+ tests/test_config_flags.py                         |     21 [32m+[m
+ tests/test_context.db                              |    Bin [31m0[m -> [32m20480[m bytes
+ tests/test_context.py                              |    101 [32m+[m
+ tests/test_db.py                                   |      8 [32m+[m
+ tests/test_digest.py                               |     10 [32m+[m
+ tests/test_dummy.py                                |      1 [32m+[m
+ tests/test_hashtag.py                              |      4 [32m+[m
+ tests/test_migration.py                            |      6 [32m+[m
+ tests/test_production.py                           |     34 [32m+[m
+ tests/test_reaction.py                             |      8 [32m+[m
+ tg-bot-webhook/__init__.py                         |      0
+ tools/__init__.py                                  |      0
+ tools/cli/__init__.py                              |      0
+ tools/cli/generate_readme.sh                       |      9 [32m+[m
+ tools/cli/make_describe.sh                         |     58 [32m+[m
+ tools/cli/run_makefile.sh                          |     42 [32m+[m
+ tools/gui/__init__.py                              |      0
+ tools/gui/run_makefile_gui.sh                      |     54 [32m+[m
+ tools/scripts/__init__.py                          |      0
+ tools/scripts/ai_smoke.py                          |     15 [32m+[m
+ tools/scripts/backup_cron.sh                       |      3 [32m+[m
+ tools/scripts/check_tables.py                      |     25 [32m+[m
+ tools/scripts/db_sync.py                           |     20 [32m+[m
+ tools/scripts/db_sync.sh                           |      4 [32m+[m
+ tools/scripts/set_bot_menu.py                      |     17 [32m+[m
+ tools/scripts/set_webhook.py                       |     61 [32m+[m
+ version/__init__.py                                |      0
+ 281 files changed, 261723 insertions(+)
