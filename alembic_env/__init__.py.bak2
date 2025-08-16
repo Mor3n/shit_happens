@@ -1,0 +1,5 @@
+
+from importlib import import_module as _import_module
+_cmd = _import_module('alembic.command')
+for _name in dir(_cmd):
+    globals()[_name] = getattr(_cmd, _name)

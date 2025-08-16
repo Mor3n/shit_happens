@@ -1,0 +1,84 @@
+# app/telegram/handlers/confess_handler.py
+from telegram import Update
+from telegram.ext import (
+    ContextTypes,
+    CommandHandler,
+    MessageHandler,
+    filters,
+)
+
+from app.services.confess_service import save_confession
+from app.services.settings_service import get_settings
+from app.telegram.helpers import safe_reply
+from app.services.ai_context import build_context
+from app.ai.prompts import system_prompt, developer_prompt
+from app.ai.client import AIClient
+from config.config import Config  # ✅ фикс импорта
+from app import app
+from app.db import get_db
+
+# Состояние ожидания текста (in-memory)
+pending_confess: set[str] = set()
+
+
+async def confess(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Команда /confess — ставим пользователя в режим ввода исповеди."""
+    user_id = str(update.effective_user.id)
+    pending_confess.add(user_id)
+    await safe_reply(update, context, "📝 Напиши свою исповедь (20–50 символов):")
+
+
+async def handle_confession_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Ловим текст, если юзер в pending_confess."""
+    if not update or not getattr(update, "message", None) or not update.message.text:
+        return
+
+    user_id = str(update.effective_user.id)
+    if user_id not in pending_confess:
+        return
+
+    text = update.message.text.strip()
+    if len(text) < 20 or len(text) > 50:
+        await safe_reply(update, context, "⚠️ Исповедь должна быть от 20 до 50 символов.")
+        return
+
+    try:
+        post = save_confession(user_id, text)
+        await safe_reply(update, context, "🙏 Исповедь принята.")
+
+        # --- ИИ-ответ на исповедь ---
+        if getattr(Config, "USE_AI_CONFESS_REPLY", False):
+            try:
+                with app.app_context():
+                    db = get_db()
+                    settings = get_settings(user_id)
+                    ctx = build_context(db, user_id=user_id, history_limit=3)
+                    ctx["post"] = post.to_dict()
+                    ctx["settings"] = settings
+
+                client = AIClient()
+                sys_p = system_prompt(settings)
+                dev_p = developer_prompt(tone=Config.AI_TONE, max_len=Config.AI_MAX_LEN)
+                ai_text = f"Пользователь исповедался:\n\n{post.text}\n\nСформулируй короткий, живой отклик в стиле Copilot."
+
+                import asyncio
+                loop = asyncio.get_running_loop()
+                res = await loop.run_in_executor(None, lambda: client.generate(sys_p, dev_p, ai_text, ctx))
+
+                reply_text = (res.text or "").strip()
+                if reply_text:
+                    await safe_reply(update, context, reply_text)
+            except Exception:
+                pass  # не валим хендлер, если ИИ не сработал
+
+    except Exception:
+        await safe_reply(update, context, "❌ Ошибка при сохранении.")
+    finally:
+        pending_confess.discard(user_id)
+
+
+# --- Экспорт хендлеров для dispatcher ---
+command_handler = CommandHandler("confess", confess)
+text_handler = MessageHandler(filters.TEXT & ~filters.COMMAND, handle_confession_text)
+
+__all__ = ["command_handler", "text_handler"]

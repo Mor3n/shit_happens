@@ -1,0 +1,5 @@
+""" Логика формирования и отправки дайджеста """
+
+def execute(*args, **kwargs):
+    # TODO: implement digest_service
+    raise NotImplementedError("digest_service not implemented yet")

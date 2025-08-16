@@ -1,0 +1,4 @@
+class Config:
+    # Заглушка конфигурации для alembic_env
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

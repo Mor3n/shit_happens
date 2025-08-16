@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: shit_happens_bot
+    env: python
+    buildCommand: pip install -r requirements.txt && alembic upgrade head
+    startCommand: ./start.sh
+    envVars:
+      - key: BOT_TOKEN
+        value: set_in_UI  # значение задаётся вручную в Render UI → Environment
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DB_URI
+        fromDatabase:
+          name: shit_happens_db
+          property: connectionString
+      - key: KEEPALIVE_URL
+        value: https://shit-happens.onrender.com
+      - key: KEEPALIVE_INTERVAL
+        value: "600"
+      - key: START_TELEGRAM_IN_WEB
+        value: "1"
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: THREADS
+        value: "1"
+      - key: GUNICORN_TIMEOUT
+        value: "120"
+      - key: LOGLEVEL
+        value: info
+
+databases:
+  - name: shit_happens_db
+    plan: free
+    databaseName: shit_happens
+    user: shit_user

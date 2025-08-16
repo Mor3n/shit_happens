@@ -1,0 +1,26 @@
+{
+  "name": "confession-generator",
+  "version": "0.1.0",
+  "entry_point": "app/main.py",
+  "env": {
+    "BOT_TOKEN": "env.BOT_TOKEN",
+    "DB_URI": "env.DB_URI",
+    "SECRET_KEY": "env.SECRET_KEY",
+    "PUBLIC_URL": "env.PUBLIC_URL",
+    "KEEPALIVE_URL": "env.KEEPALIVE_URL",
+    "KEEPALIVE_INTERVAL": "env.KEEPALIVE_INTERVAL",
+    "START_TELEGRAM_IN_WEB": "env.START_TELEGRAM_IN_WEB",
+    "USE_AI_RESPONSES": "env.USE_AI_RESPONSES",
+    "OPENAI_BASE_URL": "env.OPENAI_BASE_URL",
+    "OPENAI_MODEL": "env.OPENAI_MODEL",
+    "OPENAI_API_KEY": "env.OPENAI_API_KEY",
+    "AI_TIMEOUT": "env.AI_TIMEOUT",
+    "AI_MAX_TOKENS": "env.AI_MAX_TOKENS",
+    "AI_TEMPERATURE": "env.AI_TEMPERATURE"
+  },
+  "dependencies": [
+    { "name": "flask", "version": ">=2.3.0" },
+    { "name": "sqlalchemy", "version": "^2.0" },
+    { "name": "openai", "version": "latest" }
+  ]
+}
